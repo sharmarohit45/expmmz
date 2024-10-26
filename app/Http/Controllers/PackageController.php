@@ -70,49 +70,71 @@ class PackageController extends Controller
         return redirect()->back()->with('success', 'Trek package created successfully!');
     }
     // Show the edit form
-public function edit($id)
-{
-    $package = Package::findOrFail($id);
-    return view('admin.edit', compact('package'));
-}
+    public function edit($id)
+    {
+        $package = Package::findOrFail($id);
+        // Decode JSON attributes for use in the edit form
+        $package->route = json_decode($package->route, true);
+        $package->key_attraction = json_decode($package->key_attraction, true);
+        $package->preparation_tips = json_decode($package->preparation_tips, true);
+        $package->how_to_reach = json_decode($package->how_to_reach, true);
+        $images = json_decode($package->images, true) ?? []; // Decode images JSON
 
-// Update the trek details
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'trek_heading' => 'required|string|max:255',
-        'about_trek' => 'required|string',
-        'location' => 'required|string|max:255',
-        'altitude' => 'required|numeric',
-        'difficulty' => 'required|string',
-        'best_time_to_visit' => 'required|string',
-        'base_camp' => 'required|string',
-        'duration' => 'required|string',
-        'route' => 'required|json',
-        'key_attraction' => 'required|json',
-        'preparation_tips' => 'required|json',
-        'how_to_reach' => 'required|json',
-        'images' => 'nullable|array',
-        'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        'trek_times_season' => 'required|string',
-        'trek_times_months' => 'required|string',
-    ]);
-
-    $package = Package::findOrFail($id);
-    $package->update($request->all());
-
-    // Handle images upload if any
-    if ($request->hasFile('images')) {
-        // Assuming images are stored in the 'images' directory
-        $images = [];
-        foreach ($request->file('images') as $image) {
-            $images[] = $image->store('images');
-        }
-        $package->images = json_encode($images);
-        $package->save();
+        return view('admin.edit', compact('package'));
     }
 
-    return redirect()->route('packages.index')->with('success', 'Trek updated successfully.');
-}
+    // Update the trek details
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'trek_heading' => 'required|string|max:255',
+            'about_trek' => 'required|string',
+            'location' => 'required|string|max:255',
+            'altitude' => 'required|numeric',
+            'difficulty' => 'required|string',
+            'best_time_to_visit' => 'required|string',
+            'base_camp' => 'required|string',
+            'duration' => 'required|string',
+            'route' => 'required|array',
+            'key_attraction' => 'required|array',
+            'preparation_tips' => 'required|array',
+            'how_to_reach' => 'required|array',
+            'images' => 'nullable|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'trek_times_season' => 'required|string',
+            'trek_times_months' => 'required|string',
+        ]);
 
+        $package = Package::findOrFail($id);
+
+        // Update the package attributes
+        $package->trek_heading = $request->input('trek_heading');
+        $package->about_trek = $request->input('about_trek');
+        $package->location = $request->input('location');
+        $package->altitude = $request->input('altitude');
+        $package->difficulty = $request->input('difficulty');
+        $package->best_time_to_visit = $request->input('best_time_to_visit');
+        $package->base_camp = $request->input('base_camp');
+        $package->duration = $request->input('duration');
+        $package->route = json_encode($request->input('route'));
+        $package->key_attraction = json_encode($request->input('key_attraction'));
+        $package->preparation_tips = json_encode($request->input('preparation_tips'));
+        $package->how_to_reach = json_encode($request->input('how_to_reach'));
+        $package->trek_times_season = $request->input('trek_times_season');
+        $package->trek_times_months = $request->input('trek_times_months');
+
+        // Handle file uploads for images
+        if ($request->hasFile('images')) {
+            $images = [];
+            foreach ($request->file('images') as $image) {
+                $images[] = $image->store('public/images');
+            }
+            $package->images = json_encode($images);
+        }
+
+        // Save the updated package to the database
+        $package->save();
+
+        return redirect()->route('packages.index')->with('success', 'Trek updated successfully.');
+    }
 }
