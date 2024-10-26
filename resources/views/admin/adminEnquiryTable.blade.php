@@ -16,34 +16,38 @@
                     </div>
                     <div class="row">
                         <div class="col p-4">
-                        <table class="table table-striped table-bordered text-dark">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Subject</th>
-                                <th>Message</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="text-center">
-                                    <button class="btn btn-info"><i class="bi bi-pen"></i></button>
-                                    <button class="btn btn-danger"><i class="bi bi-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                            <table class="table table-striped table-bordered text-dark">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Subject</th>
+                                        <th>Message</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($messages as $key => $message) <!-- Loop through messages -->
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td> <!-- Indexing for row number -->
+                                            <td>{{ $message->name }}</td>
+                                            <td>{{ $message->email }}</td>
+                                            <td>{{ $message->subject }}</td>
+                                            <td>{{ $message->message }}</td>
+                                            <td class="text-center">
+                                                <form action="{{ route('contact.destroy', $message->id) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                   
                 </div>
             </div>
         </div>
