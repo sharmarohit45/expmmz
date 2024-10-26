@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,8 @@ Route::get('/about', function () {
 
 Route::get('/contact', function () {
     return view('contact');
-});
+})->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/Book-Now', function () {
     return view('booknow');
@@ -43,9 +45,7 @@ Route::middleware([
         return view('admin.adminhome');
     })->name('dashboard');
 
-    Route::get('/admin-enquiry-details', function () {
-        return view('admin.adminEnquiryTable');
-    });
+   Route::get('/admin-enquiry-details', [ContactController::class,'index']);
 
     Route::get('/admin-package-details', [PackageController::class, 'index'])->name('packages.index');
 
@@ -67,4 +67,6 @@ Route::middleware([
     // Resource routes for packages and reviews
     Route::resource('packages', PackageController::class);
     Route::resource('reviews', ReviewController::class);
+    Route::delete('/admin-enquiry-details/{id}', [ContactController::class, 'destroy'])->name('contact.destroy');
+
 });
