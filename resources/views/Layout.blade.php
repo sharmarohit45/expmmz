@@ -132,16 +132,16 @@
                         Distic - Bageshwar
                         Pin code - 263679
                         Uttarakhand</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+91 7579060903</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>chandandanu11@gmail.com</p>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Popular Links</h4>
-                    <a class="btn btn-link" href="">About Us</a>
-                    <a class="btn btn-link" href="">Contact Us</a>
-                    <a class="btn btn-link" href="">Trek Destination</a>
-                    <a class="btn btn-link" href="">Trek Times</a>
-                    <a class="btn btn-link" href="">Book now</a>
+                    <a class="btn btn-link" href="/about">About Us</a>
+                    <a class="btn btn-link" href="/contact">Contact Us</a>
+                    <a class="btn btn-link" href="/destination">Trek Destination</a>
+                    <a class="btn btn-link" href="/best-trekking-times">Trek Times</a>
+                    <a class="btn btn-link" href="/Book-Now">Book now</a>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Follow Us</h4>

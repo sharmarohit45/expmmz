@@ -10,7 +10,7 @@
                 <div class="card bg-white">
                     <div class="row p-3">
                         <div class="col-sm-8 text-dark">
-                            <h3>Enquiry Details Table</h3>
+                            <h3>Contact Details Table</h3>
                         </div>
                         <hr style="background-color: black;height:4px;margin-top: 5px;">
                     </div>
@@ -20,13 +20,17 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Trek Name</th>
-                                <th>Trek Duration</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subject</th>
+                                <th>Message</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
