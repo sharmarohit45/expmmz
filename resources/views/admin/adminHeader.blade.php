@@ -98,14 +98,20 @@
                 <div id="sidebar-wrapper">
                     <div class="sidebar-heading">Admin Panel</div>
                     <div class="list-group list-group-flush">
-                        <a href="/admin/dashboard" class="list-group-item list-group-item-action">
+                        <a href="/dashboard" class="list-group-item list-group-item-action">
                             <i class="bi bi-house-door-fill"></i> Dashboard
                         </a>
                         <a href="/admin-package-details" class="list-group-item list-group-item-action">
                             <i class="bi bi-person-fill"></i> Trek Details
                         </a>
+                        <a href="/admin-booking-details" class="list-group-item list-group-item-action">
+                            <i class="bi bi-person-fill"></i> Booking Details
+                        </a>
                         <a href="/admin-enquiry-details" class="list-group-item list-group-item-action">
-                            <i class="bi bi-person-fill"></i> Enquiry
+                            <i class="bi bi-person-fill"></i> Contact
+                        </a>
+                        <a href="/admin-review-details" class="list-group-item list-group-item-action">
+                            <i class="bi bi-person-fill"></i> Review
                         </a>
                         <a href="/user/profile" class="list-group-item list-group-item-action">
                             <i class="bi bi-gear-fill"></i> Settings

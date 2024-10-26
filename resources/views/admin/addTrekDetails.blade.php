@@ -10,7 +10,11 @@
                 <div class="card bg-white text-dark p-5">
                     <form action="{{ route('packages.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-
+                        <div class="row">
+                            <div class="col">
+                                <h1>Add Trek Details</h1>
+                            </div>
+                        </div><hr style="background-color: black; height:4px; margin-top: 5px;">
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="trek_heading">Trek Heading</label>
