@@ -27,7 +27,7 @@
                                 <th>Trek Heading</th>
                                 <th>Location</th>
                                 <th>Duration</th>
-                                <th>More Details</th> <!-- Add a new column for toggle -->
+                                <th>More Details</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -38,15 +38,11 @@
                                 <td>{{ $package->trek_heading }}</td>
                                 <td>{{ $package->location }}</td>
                                 <td>{{ $package->duration }}</td>
-
-                                <!-- Button to toggle additional details -->
                                 <td>
-                                    <button class="btn btn-primary" data-bs-toggle="collapse" href="#details-{{ $package->id }}">
+                                    <button class="btn btn-primary toggle-details" data-target="details-{{ $package->id }}">
                                         Show Details
                                     </button>
                                 </td>
-
-                                <!-- Action buttons (edit/delete) -->
                                 <td>
                                     <a href="{{ route('packages.edit', $package->id) }}" class="btn btn-info">
                                         <i class="bi bi-pen"></i>
@@ -60,79 +56,72 @@
                                     </form>
                                 </td>
                             </tr>
-
-                            <!-- Collapsible row for additional details -->
-                            <tr class="collapse" id="details-{{ $package->id }}">
+                            <tr id="details-{{ $package->id }}" style="display: none;"> <!-- Initially hidden -->
                                 <td colspan="6">
-                                    <div class="card card-body bg-white text-dark"> <!-- White background and black text -->
+                                    <div class="card card-body bg-white text-dark">
                                         <strong>About Trek:</strong> {{ $package->about_trek }} <br>
                                         <strong>Altitude:</strong> {{ $package->altitude }} <br>
                                         <strong>Difficulty:</strong> {{ $package->difficulty }} <br>
                                         <strong>Best Time to Visit:</strong> {{ $package->best_time_to_visit }} <br>
                                         <strong>Base Camp:</strong> {{ $package->base_camp }} <br>
 
-                                        <!-- Route (Array) -->
                                         <strong>Route:</strong>
                                         <ul>
                                             @if(is_array(json_decode($package->route, true)))
-                                                @foreach(json_decode($package->route, true) as $route)
-                                                    <li>{{ $route }}</li>
-                                                @endforeach
+                                            @foreach(json_decode($package->route, true) as $route)
+                                            <li>{{ $route }}</li>
+                                            @endforeach
                                             @endif
                                         </ul>
 
-                                        <!-- Key Attraction (Nested Array) -->
                                         <strong>Key Attraction:</strong>
                                         <ul>
                                             @if(is_array(json_decode($package->key_attraction, true)))
-                                                @php
-                                                    $keyAttraction = json_decode($package->key_attraction, true);
-                                                @endphp
-                                                @foreach($keyAttraction['heading'] as $index => $heading)
-                                                    <li>
-                                                        <strong>{{ $heading }}</strong>: {{ $keyAttraction['paragraph'][$index] ?? '' }}
-                                                    </li>
-                                                @endforeach
+                                            @php
+                                            $keyAttraction = json_decode($package->key_attraction, true);
+                                            @endphp
+                                            @foreach($keyAttraction['heading'] as $index => $heading)
+                                            <li>
+                                                <strong>{{ $heading }}</strong>: {{ $keyAttraction['paragraph'][$index] ?? '' }}
+                                            </li>
+                                            @endforeach
                                             @endif
                                         </ul>
 
-                                        <!-- Preparation Tips (Nested Array) -->
                                         <strong>Preparation Tips:</strong>
                                         <ul>
                                             @if(is_array(json_decode($package->preparation_tips, true)))
-                                                @php
-                                                    $preparationTips = json_decode($package->preparation_tips, true);
-                                                @endphp
-                                                @foreach($preparationTips['heading'] as $index => $heading)
-                                                    <li>
-                                                        <strong>{{ $heading }}</strong>: {{ $preparationTips['paragraph'][$index] ?? '' }}
-                                                    </li>
-                                                @endforeach
+                                            @php
+                                            $preparationTips = json_decode($package->preparation_tips, true);
+                                            @endphp
+                                            @foreach($preparationTips['heading'] as $index => $heading)
+                                            <li>
+                                                <strong>{{ $heading }}</strong>: {{ $preparationTips['paragraph'][$index] ?? '' }}
+                                            </li>
+                                            @endforeach
                                             @endif
                                         </ul>
 
-                                        <!-- How to Reach (Nested Array) -->
                                         <strong>How to Reach:</strong>
                                         <ul>
                                             @if(is_array(json_decode($package->how_to_reach, true)))
-                                                @php
-                                                    $howToReach = json_decode($package->how_to_reach, true);
-                                                @endphp
-                                                @foreach($howToReach['heading'] as $index => $heading)
-                                                    <li>
-                                                        <strong>{{ $heading }}</strong>: {{ $howToReach['paragraph'][$index] ?? '' }}
-                                                    </li>
-                                                @endforeach
+                                            @php
+                                            $howToReach = json_decode($package->how_to_reach, true);
+                                            @endphp
+                                            @foreach($howToReach['heading'] as $index => $heading)
+                                            <li>
+                                                <strong>{{ $heading }}</strong>: {{ $howToReach['paragraph'][$index] ?? '' }}
+                                            </li>
+                                            @endforeach
                                             @endif
                                         </ul>
 
-                                        <!-- Images (Array) -->
                                         <strong>Images:</strong>
                                         <div>
                                             @if(is_array(json_decode($package->images, true)))
-                                                @foreach(json_decode($package->images, true) as $image)
-                                                    <img src="{{ Storage::url($image) }}" alt="Image" width="100" />
-                                                @endforeach
+                                            @foreach(json_decode($package->images, true) as $image)
+                                            <img src="{{ Storage::url($image) }}" alt="Image" width="100" />
+                                            @endforeach
                                             @endif
                                         </div>
 
@@ -149,4 +138,25 @@
         </div>
     </div>
 </div>
+
+<!-- Add JavaScript to handle toggle functionality -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const buttons = document.querySelectorAll('.toggle-details');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const targetRow = document.getElementById(targetId);
+                // Toggle display property
+                if (targetRow.style.display === "none" || targetRow.style.display === "") {
+                    targetRow.style.display = "table-row"; // Show the details row
+                    this.textContent = "Hide Details"; // Change button text
+                } else {
+                    targetRow.style.display = "none"; // Hide the details row
+                    this.textContent = "Show Details"; // Change button text
+                }
+            });
+        });
+    });
+</script>
 @endsection
