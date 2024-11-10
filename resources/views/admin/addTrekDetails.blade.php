@@ -8,209 +8,188 @@
         <div class="row pt-5">
             <div class="col">
                 <div class="card bg-white text-dark p-5">
-                    <form action="{{ route('packages.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('treks.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="row">
-                            <div class="col">
-                                <h1>Add Trek Details</h1>
-                            </div>
-                        </div><hr style="background-color: black; height:4px; margin-top: 5px;">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="trek_heading">Trek Heading</label>
-                                <input type="text" name="trek_heading" class="form-control" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="about_trek">About Trek</label>
-                                <textarea name="about_trek" class="form-control" rows="4" required></textarea>
-                            </div>
+
+                        <!-- Trek Heading -->
+                        <div class="mb-3">
+                            <label class="form-label">Trek Heading</label>
+                            <input type="text" name="trek_heading" class="form-control">
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="location">Location</label>
-                                <input type="text" name="location" class="form-control" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="altitude">Altitude</label>
-                                <input type="text" name="altitude" class="form-control" required>
-                            </div>
+                        <!-- Price -->
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="text" name="price" class="form-control">
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="difficulty">Difficulty</label>
-                                <input type="text" name="difficulty" class="form-control" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="best_time_to_visit">Best Time to Visit</label>
-                                <input type="text" name="best_time_to_visit" class="form-control" required>
-                            </div>
+                        <!-- About Trek -->
+                        <div class="mb-3">
+                            <label class="form-label">About Trek</label>
+                            <textarea name="about_trek" class="form-control"></textarea>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="base_camp">Base Camp</label>
-                                <input type="text" name="base_camp" class="form-control" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="duration">Duration</label>
-                                <input type="text" name="duration" class="form-control" required>
-                            </div>
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <label class="form-label">Location</label>
+                            <input type="text" name="location" class="form-control">
+                        </div>
+                        <!-- Best Time to Visit -->
+                        <div class="mb-3">
+                            <label class="form-label">Best Time to Visit</label>
+                            <input type="text" name="best_time_to_visit" class="form-control">
                         </div>
 
-                        <!-- Route (Dynamic Input) -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="route">Route</label>
-                                <div id="route-container">
-                                    <input type="text" name="route[]" class="form-control mb-2" placeholder="Enter Route">
+                        <!-- Base Camp -->
+                        <div class="mb-3">
+                            <label class="form-label">Base Camp</label>
+                            <input type="text" name="base_camp" class="form-control">
+                        </div>
+
+                        <!-- Duration -->
+                        <div class="mb-3">
+                            <label class="form-label">Duration</label>
+                            <input type="text" name="duration" class="form-control">
+                        </div>
+                        <!-- Altitude -->
+                        <div class="mb-3">
+                            <label class="form-label">Altitude</label>
+                            <input type="text" name="altitude" class="form-control">
+                        </div>
+
+                        <!-- Difficulty -->
+                        <div class="mb-3">
+                            <label class="form-label">Difficulty</label>
+                            <input type="text" name="difficulty" class="form-control">
+                        </div>
+
+                        <!-- Dynamic fields for Route -->
+                        <div class="mb-3">
+                            <label class="form-label">Route</label>
+                            <div id="routeContainer">
+                                <div class="input-group mb-2">
+                                    <input type="text" name="route[]" class="form-control" placeholder="Enter Route">
+                                    <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
                                 </div>
-                                <button type="button" class="btn btn-secondary" onclick="addRoute()">Add Route</button>
                             </div>
+                            <button type="button" class="btn btn-secondary" onclick="addRoute()">Add Route</button>
                         </div>
 
-                        <!-- Key Attraction (Dynamic Input) -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="key_attraction">Key Attraction</label>
-                                <div id="key-attraction-container">
-                                    <input type="text" name="key_attraction[heading][]" class="form-control mb-2" placeholder="Heading">
-                                    <textarea name="key_attraction[paragraph][]" class="form-control mb-2" rows="2" placeholder="Paragraph"></textarea>
-                                </div>
-                                <button type="button" class="btn btn-secondary" onclick="addAttraction()">Add Attraction</button>
+                        <!-- Dynamic fields for Key Attractions -->
+                        <div id="keyAttractionContainer">
+                            <div class="input-group mb-2">
+                                <input type="text" name="key_attraction[0][heading]" class="form-control" placeholder="Attraction Heading">
+                                <textarea name="key_attraction[0][paragraph]" class="form-control" placeholder="Details about attraction"></textarea>
+                                <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
                             </div>
                         </div>
+                        <button type="button" class="btn btn-primary" onclick="addKeyAttraction()">Add Key Attraction</button>
 
-                        <!-- Preparation and Tips (Dynamic Input) -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="preparation_tips">Preparation and Tips</label>
-                                <div id="preparation-tips-container">
-                                    <input type="text" name="preparation_tips[heading][]" class="form-control mb-2" placeholder="Heading">
-                                    <textarea name="preparation_tips[paragraph][]" class="form-control mb-2" rows="2" placeholder="Paragraph"></textarea>
-                                </div>
-                                <button type="button" class="btn btn-secondary" onclick="addTip()">Add Tip</button>
+                        <!-- Preparation Tips Section -->
+                        <h4>Preparation Tips</h4>
+                        <div id="preparationTipsContainer">
+                            <div class="input-group mb-2">
+                                <input type="text" name="preparation_tips[0][heading]" class="form-control" placeholder="Tip Heading">
+                                <textarea name="preparation_tips[0][paragraph]" class="form-control" placeholder="Details about tip"></textarea>
+                                <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
                             </div>
                         </div>
+                        <button type="button" class="btn btn-primary mb-3" onclick="addPreparationTip()">Add Preparation Tip</button>
 
-                        <!-- HOW TO REACH (Dynamic Input) -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="how_to_reach">HOW TO REACH</label>
-                                <div id="how-to-reach-container">
-                                    <input type="text" name="how_to_reach[heading][]" class="form-control mb-2" placeholder="Heading">
-                                    <textarea name="how_to_reach[paragraph][]" class="form-control mb-2" rows="2" placeholder="Paragraph"></textarea>
-                                </div>
-                                <button type="button" class="btn btn-secondary" onclick="addHowToReach()">Add How to Reach</button>
+                        <!-- How to Reach Section -->
+                        <h4>How to Reach</h4>
+                        <div id="howToReachContainer">
+                            <div class="input-group mb-2">
+                                <input type="text" name="how_to_reach[0][heading]" class="form-control" placeholder="Method Heading">
+                                <textarea name="how_to_reach[0][paragraph]" class="form-control" placeholder="Details about reaching method"></textarea>
+                                <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
                             </div>
                         </div>
+                        <button type="button" class="btn btn-primary mb-3" onclick="addHowToReach()">Add How to Reach</button>
 
-                        <!-- Images (Multiple) -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="images">Images</label>
-                                <input type="file" name="images[]" class="form-control" multiple>
-                            </div>
+                        <!-- Upload Images -->
+                        <div class="mb-3">
+                            <label class="form-label">Images</label>
+                            <input type="file" name="images[]" class="form-control" multiple>
                         </div>
 
-                        <!-- Trek Times (Season) -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="trek_times_season">Trek Times (Season)</label>
-                                <select name="trek_times_season" class="form-control" required>
-                                    <option value="Winter">Winter</option>
-                                    <option value="Summer">Summer</option>
-                                </select>
-                            </div>
-
-                            <!-- Trek Times (Months) -->
-                            <div class="col-md-6">
-                                <label for="trek_times_months">Trek Times (Months)</label>
-                                <select name="trek_times_months" class="form-control" required>
-                                    <option value="January">January</option>
-                                    <option value="February">February</option>
-                                    <option value="March">March</option>
-                                    <option value="April">April</option>
-                                    <option value="May">May</option>
-                                    <option value="June">June</option>
-                                    <option value="July">July</option>
-                                    <option value="August">August</option>
-                                    <option value="September">September</option>
-                                    <option value="October">October</option>
-                                    <option value="November">November</option>
-                                    <option value="December">December</option>
-                                </select>
-                            </div>
+                        <!-- Select Trek Times Season -->
+                        <div class="mb-3">
+                            <label class="form-label">Trek Times Season</label>
+                            <select name="trek_times_season" class="form-select">
+                                <option value="winter">Winter</option>
+                                <option value="summer">Summer</option>
+                            </select>
                         </div>
 
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                        <!-- Select Trek Times Month -->
+                        <div class="mb-3">
+                            <label class="form-label">Trek Times Month</label>
+                            <input type="month" name="trek_times_months" class="form-control">
                         </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary">Create Trek</button>
                     </form>
                 </div>
             </div>
         </div>
-
-        <script>
-            // Dynamic route input
-            function addRoute() {
-                const container = document.getElementById('route-container');
-                const div = document.createElement('div');
-                div.className = 'input-group mb-2';
-                div.innerHTML = `
-                    <input type="text" name="route[]" class="form-control" placeholder="Enter Route">
-                    <div class="input-group-append">
-                        <button class="btn btn-danger" type="button" onclick="removeElement(this)">Remove</button>
-                    </div>
-                `;
-                container.appendChild(div);
-            }
-
-            // Dynamic key attraction
-            function addAttraction() {
-                const container = document.getElementById('key-attraction-container');
-                const div = document.createElement('div');
-                div.className = 'mb-2';
-                div.innerHTML = `
-                    <input type="text" name="key_attraction[heading][]" class="form-control mb-2" placeholder="Heading">
-                    <textarea name="key_attraction[paragraph][]" class="form-control mb-2" rows="2" placeholder="Paragraph"></textarea>
-                    <button class="btn btn-danger mb-2" type="button" onclick="removeElement(this)">Remove</button>
-                `;
-                container.appendChild(div);
-            }
-
-            // Dynamic preparation and tips
-            function addTip() {
-                const container = document.getElementById('preparation-tips-container');
-                const div = document.createElement('div');
-                div.className = 'mb-2';
-                div.innerHTML = `
-                    <input type="text" name="preparation_tips[heading][]" class="form-control mb-2" placeholder="Heading">
-                    <textarea name="preparation_tips[paragraph][]" class="form-control mb-2" rows="2" placeholder="Paragraph"></textarea>
-                    <button class="btn btn-danger mb-2" type="button" onclick="removeElement(this)">Remove</button>
-                `;
-                container.appendChild(div);
-            }
-
-            // Dynamic how to reach
-            function addHowToReach() {
-                const container = document.getElementById('how-to-reach-container');
-                const div = document.createElement('div');
-                div.className = 'mb-2';
-                div.innerHTML = `
-                    <input type="text" name="how_to_reach[heading][]" class="form-control mb-2" placeholder="Heading">
-                    <textarea name="how_to_reach[paragraph][]" class="form-control mb-2" rows="2" placeholder="Paragraph"></textarea>
-                    <button class="btn btn-danger mb-2" type="button" onclick="removeElement(this)">Remove</button>
-                `;
-                container.appendChild(div);
-            }
-
-            // Remove dynamic element
-            function removeElement(button) {
-                button.closest('.mb-2').remove();
-            }
-        </script>
     </div>
 </div>
-@endsection
+
+<script>
+    let keyAttractionIndex = 1;
+    let preparationTipsIndex = 1;
+    let howToReachIndex = 1;
+
+    function addRoute() {
+        const container = document.getElementById('routeContainer');
+        const newRoute = `<div class="input-group mb-2">
+                            <input type="text" name="route[]" class="form-control" placeholder="Enter Route">
+                            <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
+                          </div>`;
+        container.insertAdjacentHTML('beforeend', newRoute);
+    }
+
+    function addKeyAttraction() {
+        const container = document.getElementById('keyAttractionContainer');
+        const newAttraction = `
+    <div class="input-group mb-2">
+        <input type="text" name="key_attraction[${keyAttractionIndex}][heading]" class="form-control" placeholder="Attraction Heading">
+        <textarea name="key_attraction[${keyAttractionIndex}][paragraph]" class="form-control" placeholder="Details about attraction"></textarea>
+        <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
+    </div>`;
+        container.insertAdjacentHTML('beforeend', newAttraction);
+        keyAttractionIndex++;
+    }
+
+    function addPreparationTip() {
+        const container = document.getElementById('preparationTipsContainer');
+        const newTip = `
+    <div class="input-group mb-2">
+        <input type="text" name="preparation_tips[${preparationTipsIndex}][heading]" class="form-control" placeholder="Tip Heading">
+        <textarea name="preparation_tips[${preparationTipsIndex}][paragraph]" class="form-control" placeholder="Details about tip"></textarea>
+        <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
+    </div>`;
+        container.insertAdjacentHTML('beforeend', newTip);
+        preparationTipsIndex++;
+    }
+
+    function addHowToReach() {
+        const container = document.getElementById('howToReachContainer');
+        const newMethod = `
+    <div class="input-group mb-2">
+        <input type="text" name="how_to_reach[${howToReachIndex}][heading]" class="form-control" placeholder="Method Heading">
+        <textarea name="how_to_reach[${howToReachIndex}][paragraph]" class="form-control" placeholder="Details about reaching method"></textarea>
+        <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
+    </div>`;
+        container.insertAdjacentHTML('beforeend', newMethod);
+        howToReachIndex++;
+    }
+
+
+    function removeElement(button) {
+        button.closest('.input-group').remove();
+    }
+</script>
+@endsection give edit functionality also

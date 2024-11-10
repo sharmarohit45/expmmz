@@ -15,3 +15,5 @@ class Package extends Model
         'trek_times_season', 'trek_times_months'
     ];
 }
+//treak deatils
+//

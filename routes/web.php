@@ -4,6 +4,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\TrekController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -47,7 +48,7 @@ Route::middleware([
 
    Route::get('/admin-enquiry-details', [ContactController::class,'index']);
 
-    Route::get('/admin-package-details', [PackageController::class, 'index'])->name('packages.index');
+    Route::get('/admin-package-details', [TrekController::class, 'index'])->name('treks.index');
 
     Route::get('/admin-add-trek', function () {
         return view('admin.addTrekDetails');
@@ -65,8 +66,11 @@ Route::middleware([
     Route::get('/admin-review-details', [ReviewController::class, 'index'])->name('admin.reviews.index');
 
     // Resource routes for packages and reviews
-    Route::resource('packages', PackageController::class);
+    Route::resource('treks', TrekController::class);
     Route::resource('reviews', ReviewController::class);
     Route::delete('/admin-enquiry-details/{id}', [ContactController::class, 'destroy'])->name('contact.destroy');
+    Route::get('/treks/{id}', [TrekController::class, 'show'])->name('treks.show');
+    Route::get('/treks/edit/{id}', [TrekController::class, 'edit'])->name('treks.edit');
+
 
 });
