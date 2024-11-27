@@ -2,14 +2,11 @@
 
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TrekController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('homepage');
-});
+Route::get('/',[TrekController::class, 'showDetails'] );
 
 Route::get('/about', function () {
     return view('about');
@@ -18,6 +15,9 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+Route::get('/trek-destination',[TrekController::class, 'showDetail'])->name('trek-destination');
+// Route::get('/trek-destinations/{id}',[TrekController::class, 'showData'])->name('trek-destinations');
+Route::get('/trek-destinations/{id}', [TrekController::class, 'showdata'])->name('trek.showdata');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::get('/Book-Now', function () {

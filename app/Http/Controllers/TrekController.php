@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Models\Trek;
 use Illuminate\Support\Facades\Log;
@@ -11,10 +12,71 @@ class TrekController extends Controller
 {
     public function index()
     {
-        $data = Trek::all(); // Fetch all trek packages from the database
-        return view('admin.adminPackageList', compact('data')); // Pass the trek data to the view
+        $data = Trek::all();
+        return view('admin.adminPackageList', compact('data'));
     }
+    public function showDetail()
+    {
+        $data = Trek::all();
+    
+        // Decode and normalize image paths for each trek
+        foreach ($data as $trek) {
+            if (is_string($trek->image_paths)) {
+                // Decode the JSON string into an array
+                $trek->image_paths = json_decode($trek->image_paths, true);
+    
+                // Normalize the paths by replacing backslashes with forward slashes
+                $trek->image_paths = array_map(function ($path) {
+                    return str_replace('\\', '/', $path);
+                }, $trek->image_paths);
+    
+                // Check if image paths are valid (not empty)
+                if (empty($trek->image_paths)) {
+                    // If no images exist, set a default image
+                    $trek->image_paths = ['images/default-image.jpg'];
+                }
+            } else {
+                // If image_paths is not a string, set a default image
+                $trek->image_paths = ['images/default-image.jpg'];
+            }
+        }
+    
+        return view('trekDestination', compact('data'));
+    }
+    public function showDetails()
+    {
+        $reviews = Review::all();
 
+        // Store reviews in session (optional)
+        session(['reviews' => $reviews]);
+
+        $data = Trek::all();
+        // Decode and normalize image paths for each trek
+        foreach ($data as $trek) {
+            if (is_string($trek->image_paths)) {
+                // Decode the JSON string into an array
+                $trek->image_paths = json_decode($trek->image_paths, true);
+    
+                // Normalize the paths by replacing backslashes with forward slashes
+                $trek->image_paths = array_map(function ($path) {
+                    return str_replace('\\', '/', $path);
+                }, $trek->image_paths);
+    
+                // Check if image paths are valid (not empty)
+                if (empty($trek->image_paths)) {
+                    // If no images exist, set a default image
+                    $trek->image_paths = ['images/default-image.jpg'];
+                }
+            } else {
+                // If image_paths is not a string, set a default image
+                $trek->image_paths = ['images/default-image.jpg'];
+            }
+        }
+    
+        return view('homepage', compact('reviews', 'data'));
+    }
+    
+    
     public function store(Request $request)
     {
         Log::info('Incoming request data===:', $request->all());
@@ -84,16 +146,46 @@ class TrekController extends Controller
     {
         $trek = Trek::findOrFail($id);
         $trek->image_paths = json_decode($trek->image_paths, true);
-        // dd($trek->image_paths); // Uncomment for debugging
-        return view('admin.adminTrekDetails', compact('trek')); // Pass trek data to view
+        return view('admin.adminTrekDetails', compact('trek'));
+    }
+
+
+    public function showdata($id)
+    {
+        // Find the trek by its ID
+        $trek = Trek::findOrFail($id);
+
+        // Decode fields if they are JSON strings
+        if (is_string($trek->route)) {
+            $trek->route = json_decode($trek->route, true);
+        }
+        if (is_string($trek->itinerary)) {
+            $trek->itinerary = json_decode($trek->itinerary, true);
+        }
+        if (is_string($trek->key_attraction)) {
+            $trek->key_attraction = json_decode($trek->key_attraction, true);
+        }
+        if (is_string($trek->preparation_tips)) {
+            $trek->preparation_tips = json_decode($trek->preparation_tips, true);
+        }
+        if (is_string($trek->how_to_reach)) {
+            $trek->how_to_reach = json_decode($trek->how_to_reach, true);
+        }
+        if (is_string($trek->image_paths)) {
+            $trek->image_paths = json_decode($trek->image_paths, true);
+            // Normalize the paths by replacing backslashes with forward slashes
+            $trek->image_paths = array_map(function ($path) {
+                return str_replace('\\', '/', $path);
+            }, $trek->image_paths);
+        }
+        return view('trekDetails', compact('trek'));
     }
 
 
     public function edit($id)
     {
         $trek = Trek::findOrFail($id);
-        // dd($trek);
-        return view('admin.edittrek', compact('trek')); // Pass trek data to edit view
+        return view('admin.edittrek', compact('trek'));
     }
     public function update(Request $request, $id)
     {
