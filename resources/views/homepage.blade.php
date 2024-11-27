@@ -162,63 +162,30 @@
             <p>Discover the allure of nature's most breathtaking landscapes, where every trail tells a story. These popular trekking destinations have been shaped by the forces of nature and time, offering a perfect blend of adventure, serenity, and cultural richness. Whether you're seeking a peaceful escape or an adrenaline-filled journey, these trails promise an unforgettable experience. Embrace the wilderness, challenge yourself, and immerse in the natural beauty that these treks have to offer.</p>
         </div>
         <div class="row g-4 justify-content-center">
+        @foreach($data as $trek)
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="courses-item d-flex flex-column bg-white overflow-hidden h-100">
                     <div class="text-center p-4 pt-0">
-                        <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">$99</div>
-                        <h5 class="mb-3">Automatic Car Lessons</h5>
-                        <p>Tempor erat elitr rebum at clita dolor diam ipsum sit diam amet diam et eos</p>
+                        <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">Price On Request</div>
+                        <h5 class="mb-3">{{ $trek->trek_heading }}</h5>
+                        <p>{{ $trek->about_trek }}</p>
                         <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item small"><i class="fa fa-signal text-primary me-2"></i>Beginner</li>
-                            <li class="breadcrumb-item small"><i class="fa fa-calendar-alt text-primary me-2"></i>3 Week</li>
+                            <li class="breadcrumb-item small"><i class="fa fa-calendar-alt text-primary me-2"></i>{{ $trek->duration }}</li>
                         </ol>
                     </div>
                     <div class="position-relative mt-auto">
-                        <img class="img-fluid" src="img/courses-1.jpg" alt="">
+                        @if (!empty($trek->image_paths) && isset($trek->image_paths[0]) && File::exists(public_path($trek->image_paths[0])))
+                        <img class="img-fluid" src="{{ asset($trek->image_paths[0]) }}" alt="Trek Image">
+                        @else
+                        <img class="img-fluid" src="{{ asset('images/default-image.jpg') }}" alt="Default Image">
+                        @endif
                         <div class="courses-overlay">
-                            <a class="btn btn-outline-primary border-2" href="">Read More</a>
+                            <a class="btn btn-outline-primary border-2" href="{{ route('trek.showdata', $trek->id) }}">Read More</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                <div class="courses-item d-flex flex-column bg-white overflow-hidden h-100">
-                    <div class="text-center p-4 pt-0">
-                        <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">$99</div>
-                        <h5 class="mb-3">Highway Driving Lesson</h5>
-                        <p>Tempor erat elitr rebum at clita dolor diam ipsum sit diam amet diam et eos</p>
-                        <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item small"><i class="fa fa-signal text-primary me-2"></i>Beginner</li>
-                            <li class="breadcrumb-item small"><i class="fa fa-calendar-alt text-primary me-2"></i>3 Week</li>
-                        </ol>
-                    </div>
-                    <div class="position-relative mt-auto">
-                        <img class="img-fluid" src="img/courses-2.jpg" alt="">
-                        <div class="courses-overlay">
-                            <a class="btn btn-outline-primary border-2" href="">Read More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
-                <div class="courses-item d-flex flex-column bg-white overflow-hidden h-100">
-                    <div class="text-center p-4 pt-0">
-                        <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">$99</div>
-                        <h5 class="mb-3">International Driving</h5>
-                        <p>Tempor erat elitr rebum at clita dolor diam ipsum sit diam amet diam et eos</p>
-                        <ol class="breadcrumb justify-content-center mb-0">
-                            <li class="breadcrumb-item small"><i class="fa fa-signal text-primary me-2"></i>Beginner</li>
-                            <li class="breadcrumb-item small"><i class="fa fa-calendar-alt text-primary me-2"></i>3 Week</li>
-                        </ol>
-                    </div>
-                    <div class="position-relative mt-auto">
-                        <img class="img-fluid" src="img/courses-3.jpg" alt="">
-                        <div class="courses-overlay">
-                            <a class="btn btn-outline-primary border-2" href="">Read More</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endforeach
             <div class="col-lg-8 my-6 mb-0 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="bg-primary text-center p-5">
                     <h1 class="mb-4">Make Appointment</h1>
@@ -409,73 +376,6 @@
 </div>
 <!-- Team End -->
 
-<!-- <div class="container-xxl courses my-6 py-6 pb-0">
-    <div class="container">
-        <div class="text-center mx-auto mb-3">
-            <h6 class="text-primary text-uppercase mb-2">FIND THE BEST TREKKING TIME</h6>
-            <h1 class="display-6 mb-4">Best Trekking Time</h1>
-            <p>Discover the trekking by choice</p>
-        </div>
-
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item me-3" role="presentation">
-                <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
-                    <b class="text-dark">All</b>
-                </button>
-            </li>
-            <li class="nav-item me-3" role="presentation">
-                <button class="nav-link" id="april-june-tab" data-bs-toggle="pill" data-bs-target="#april-june" type="button" role="tab" aria-controls="april-june" aria-selected="false">
-                    <b class="text-dark">April to June</b>
-                </button>
-            </li>
-            <li class="nav-item me-3" role="presentation">
-                <button class="nav-link" id="may-june-tab" data-bs-toggle="pill" data-bs-target="#may-june" type="button" role="tab" aria-controls="may-june" aria-selected="false">
-                    <b class="text-dark">May to June</b>
-                </button>
-            </li>
-            <li class="nav-item me-3" role="presentation">
-                <button class="nav-link" id="sep-oct-tab" data-bs-toggle="pill" data-bs-target="#sep-oct" type="button" role="tab" aria-controls="sep-oct" aria-selected="false">
-                    <b class="text-dark">September to October</b>
-                </button>
-            </li>
-            <li class="nav-item me-3" role="presentation">
-                <button class="nav-link" id="sep-nov-tab" data-bs-toggle="pill" data-bs-target="#sep-nov" type="button" role="tab" aria-controls="sep-nov" aria-selected="false">
-                    <b class="text-dark">September to November</b>
-                </button>
-            </li>
-        </ul>
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
-                <div class="row g-4 justify-content-center">
-                    <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                        <div class="courses-item d-flex flex-column bg-white overflow-hidden h-100">
-                            <div class="text-center p-4 pt-0">
-                                <div class="d-inline-block bg-primary text-white fs-5 py-1 px-4 mb-4">PRICE ON REQUEST</div>
-                                <h5 class="mb-3">Pindari Glacier Trek</h5>
-                                <p>Located in the Kumaon region of Uttarakhand, this trek takes you through lush forests, quaint villages, and offers stunning views of the Pindari Glacier.</p>
-                                <ol class="breadcrumb justify-content-center mb-0">
-                                    <li class="breadcrumb-item small"><i class="fa fa-calendar-alt text-primary me-2"></i>8 to 10 days (depending on the route and pace)</li>
-                                </ol>
-                            </div>
-                            <div class="position-relative mt-auto">
-                                <img class="img-fluid" src="{{ asset('img/Gallery/places/gallery (11).jpg') }}" width="100%" alt="Pindari Glacier Trek" />
-                                <div class="courses-overlay">
-                                    <a class="btn btn-outline-primary border-2" href="{{ url('/Pindari-Glacier-Trek') }}">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-
-
-
 <!-- Testimonial Start -->
 <div class="container-xxl py-6">
     <div class="container">
@@ -486,47 +386,28 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="owl-carousel testimonial-carousel">
+                    @foreach($reviews as $review)
                     <div class="testimonial-item text-center">
                         <div class="position-relative mb-5">
-                            <img class="img-fluid rounded-circle mx-auto" src="img/testimonial-1.jpg" alt="">
+                            <!-- Check if the review has an image, if not use a placeholder -->
+                            <img class="img-fluid rounded-circle mx-auto" src="{{ asset($review->image_name ?: 'img/default-testimonial.jpg') }}" alt="{{ $review->name ?? 'Review Image' }}">
                             <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white rounded-circle" style="width: 60px; height: 60px;">
                                 <i class="fa fa-quote-left fa-2x text-primary"></i>
                             </div>
                         </div>
-                        <p class="fs-4">Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat.</p>
+                        <p class="fs-4">{!! nl2br(e($review->review)) !!}</p> <!-- Review content with proper escaping -->
                         <hr class="w-25 mx-auto">
-                        <h5>Client Name</h5>
-                        <span>Profession</span>
+                        <h5>{{ $review->name ?? 'Anonymous' }}</h5> <!-- Fallback name if empty -->
+                        <span>{{ $review->profession ?? 'Profession not provided' }}</span> <!-- Fallback profession -->
                     </div>
-                    <div class="testimonial-item text-center">
-                        <div class="position-relative mb-5">
-                            <img class="img-fluid rounded-circle mx-auto" src="img/testimonial-2.jpg" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white rounded-circle" style="width: 60px; height: 60px;">
-                                <i class="fa fa-quote-left fa-2x text-primary"></i>
-                            </div>
-                        </div>
-                        <p class="fs-4">Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat.</p>
-                        <hr class="w-25 mx-auto">
-                        <h5>Client Name</h5>
-                        <span>Profession</span>
-                    </div>
-                    <div class="testimonial-item text-center">
-                        <div class="position-relative mb-5">
-                            <img class="img-fluid rounded-circle mx-auto" src="img/testimonial-3.jpg" alt="">
-                            <div class="position-absolute top-100 start-50 translate-middle d-flex align-items-center justify-content-center bg-white rounded-circle" style="width: 60px; height: 60px;">
-                                <i class="fa fa-quote-left fa-2x text-primary"></i>
-                            </div>
-                        </div>
-                        <p class="fs-4">Dolores sed duo clita tempor justo dolor et stet lorem kasd labore dolore lorem ipsum. At lorem lorem magna ut et, nonumy et labore et tempor diam tempor erat.</p>
-                        <hr class="w-25 mx-auto">
-                        <h5>Client Name</h5>
-                        <span>Profession</span>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <!-- Testimonial End -->
 
 @endsection
