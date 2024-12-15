@@ -79,21 +79,23 @@ class TrekController extends Controller
     
     public function store(Request $request)
     {
-        Log::info('Incoming request data===:', $request->all());
+       ///dd('Incoming request data===:', $request->all());
 
         try {
             $validated = $request->validate([
-                'trek_heading' => 'required|string',
-                'price' => 'required|string',
-                'about_trek' => 'required|string',
-                'location' => 'required|string',
-                'altitude' => 'required|string',
-                'difficulty' => 'required|string',
-                'best_time_to_visit' => 'required|string',
-                'base_camp' => 'required|string',
-                'duration' => 'required|string',
+                'trek_heading' => 'string',
+                'price' => 'string',
+                'about_trek' => 'string',
+                'location' => 'string',
+                'altitude' => 'string',
+                'trekDetails' => 'string',
+                'difficulty' => 'string',
+                'best_time_to_visit' => 'string',
+                'base_camp' => 'string',
+                'duration' => 'string',
                 'route' => 'array',
                 'key_attraction' => 'array',
+                'Itnery_tips' => 'array',
                 'preparation_tips' => 'array',
                 'how_to_reach' => 'array',
                 'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image file
@@ -171,6 +173,9 @@ class TrekController extends Controller
         if (is_string($trek->how_to_reach)) {
             $trek->how_to_reach = json_decode($trek->how_to_reach, true);
         }
+        if (is_string($trek->Itnery_tips)) {
+            $trek->Itnery_tips = json_decode($trek->Itnery_tips, true);
+        }
         if (is_string($trek->image_paths)) {
             $trek->image_paths = json_decode($trek->image_paths, true);
             // Normalize the paths by replacing backslashes with forward slashes
@@ -194,17 +199,19 @@ class TrekController extends Controller
         try {
             // Validate incoming data
             $validated = $request->validate([
-                'trek_heading' => 'required|string',
-                'price' => 'required|string',
-                'about_trek' => 'required|string',
-                'location' => 'required|string',
-                'altitude' => 'required|string',
-                'difficulty' => 'required|string',
-                'best_time_to_visit' => 'required|string',
-                'base_camp' => 'required|string',
-                'duration' => 'required|string',
+                'trek_heading' => 'string',
+                'price' => 'string',
+                'about_trek' => 'string',
+                'location' => 'string',
+                'altitude' => 'string',
+                'trekDetails' => 'string',
+                'difficulty' => 'string',
+                'best_time_to_visit' => 'string',
+                'base_camp' => 'string',
+                'duration' => 'string',
                 'route' => 'array',
                 'key_attraction' => 'array',
+                'Itnery_tips' => 'array',
                 'preparation_tips' => 'array',
                 'how_to_reach' => 'array',
                 'images.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validate image file
@@ -265,7 +272,6 @@ class TrekController extends Controller
             File::delete(public_path($imagePath));
         }
         $trek->delete();
-
         return redirect()->route('treks.index')->with('success', 'Trek deleted successfully.');
     }
 }

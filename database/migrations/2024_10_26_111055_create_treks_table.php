@@ -18,12 +18,14 @@ return new class extends Migration
             $table->string('about_trek'); // Changed to string
             $table->string('location');
             $table->string('altitude');
+            $table->string('trekDetails');
             $table->string('difficulty');
             $table->string('best_time_to_visit');
             $table->string('base_camp');
             $table->string('duration');
             $table->json('route')->nullable();
             $table->json('key_attraction')->nullable();
+            $table->json('Itnery_tips')->nullable();
             $table->json('preparation_tips')->nullable();
             $table->json('how_to_reach')->nullable();
             $table->json('image_paths')->nullable();

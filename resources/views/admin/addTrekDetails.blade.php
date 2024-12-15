@@ -56,6 +56,12 @@
                             <label class="form-label">Altitude</label>
                             <input type="text" name="altitude" class="form-control">
                         </div>
+                         
+                        <div class="mb-3">
+                            <label class="form-label">Trek Details</label>
+                            <input type="text" name="trekDetails" class="form-control">
+                        </div>
+
 
                         <!-- Difficulty -->
                         <div class="mb-3">
@@ -86,6 +92,16 @@
                         <button type="button" class="btn btn-primary" onclick="addKeyAttraction()">Add Key Attraction</button>
 
                         <!-- Preparation Tips Section -->
+                        <h4>Itnery</h4>
+                        <div id="itneryTipsContainer">
+                            <div class="input-group mb-2">
+                                <input type="text" name="Itnery_tips[0][heading]" class="form-control" placeholder="Tip Heading">
+                                <textarea name="Itnery_tips[0][paragraph]" class="form-control" placeholder="Details about tip"></textarea>
+                                <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary mb-3" onclick="addItnery()">Add Itenery Tip</button>
+                       
                         <h4>Preparation Tips</h4>
                         <div id="preparationTipsContainer">
                             <div class="input-group mb-2">
@@ -140,6 +156,7 @@
 <script>
     let keyAttractionIndex = 1;
     let preparationTipsIndex = 1;
+    let ItneryIndex = 1;
     let howToReachIndex = 1;
 
     function addRoute() {
@@ -174,6 +191,17 @@
         container.insertAdjacentHTML('beforeend', newTip);
         preparationTipsIndex++;
     }
+    function addItnery() {
+        const container = document.getElementById('itneryTipsContainer');
+        const newTip = `
+    <div class="input-group mb-2">
+        <input type="text" name="Itnery_tips[${ItneryIndex}][heading]" class="form-control" placeholder="Tip Heading">
+        <textarea name="Itnery_tips[${ItneryIndex}][paragraph]" class="form-control" placeholder="Details about tip"></textarea>
+        <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
+    </div>`;
+        container.insertAdjacentHTML('beforeend', newTip);
+        ItneryIndex++;
+    }
 
     function addHowToReach() {
         const container = document.getElementById('howToReachContainer');
@@ -187,9 +215,8 @@
         howToReachIndex++;
     }
 
-
     function removeElement(button) {
         button.closest('.input-group').remove();
     }
 </script>
-@endsection give edit functionality also
+@endsection
