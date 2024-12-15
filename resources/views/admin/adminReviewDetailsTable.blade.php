@@ -20,8 +20,6 @@
                         </div>
                         <hr style="background-color: black;height:4px;margin-top: 5px;">
                     </div>
-
-                    {{-- Display success message --}}
                     @if(session('success'))
                         <div class="alert alert-success text-center">
                             {{ session('success') }}

@@ -8,7 +8,17 @@
             <form action="{{ route('treks.update', $trek->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+                @if(session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+                @endif
 
+                @if(session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+                @endif
                 <!-- Trek Heading -->
                 <div class="mb-3">
                     <label class="form-label">Trek Heading</label>
@@ -56,13 +66,18 @@
                     <input type="text" name="altitude" class="form-control" value="{{ old('altitude', $trek->altitude) }}">
                 </div>
 
+                <div class="col-md-6">
+                    <label for="trekDetails">Trek Details</label>
+                    <input type="text" name="trekDetails" class="form-control" value="{{ old('trekDetails', $trek->trekDetails) }}" required>
+                </div>
+
                 <!-- Difficulty -->
                 <div class="mb-3">
                     <label class="form-label">Difficulty</label>
                     <input type="text" name="difficulty" class="form-control" value="{{ old('difficulty', $trek->difficulty) }}">
                 </div>
 
-                <!-- Dynamic fields for Route -->
+                <!-- Dynamic fields for Route
                 <div class="mb-3">
                     <label class="form-label">Route</label>
                     <div id="routeContainer">
@@ -75,6 +90,44 @@
                     </div>
                     <button type="button" class="btn btn-secondary" onclick="addDynamicField('route')">Add Route</button>
                     <input type="hidden" id="routeIndex" value="{{ count($trek->route) }}">
+                </div> -->
+
+                <!-- Route (Dynamic Input) -->
+                <div class="mb-3">
+                    <label class="form-label">Route</label>
+                    <div id="routeContainer">
+                        <!-- Pre-populate existing routes -->
+                        @foreach($trek->route as $index => $route)
+                        <div class="input-group mb-2" id="route-{{ $index }}">
+                            <input type="text" name="route[]" class="form-control" value="{{ $route }}" placeholder="Enter Route">
+                            <button type="button" class="btn btn-danger" onclick="removeRouteField('route-{{ $index }}')">Remove</button>
+                        </div>
+                        @endforeach
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addRouteField()">Add Route</button>
+                </div>
+
+
+
+                <div class="mb-3">
+                    <label class="form-label">Itnery</label>
+                    <div id="Itnery_tipsContainer">
+                        @foreach($trek->Itnery_tips as $index => $itnery)
+                        <div class="row mb-2 align-items-center">
+                            <div class="col-md-4">
+                                <input type="text" name="Itnery_tips[{{ $index }}][heading]" class="form-control" value="{{ old('Itnery_tips.' . $index . '.heading', $itnery['heading']) }}" placeholder="Attraction Heading">
+                            </div>
+                            <div class="col-md-6">
+                                <textarea name="Itnery_tips[{{ $index }}][paragraph]" class="form-control" placeholder="Details about itnery">{{ old('Itnery_tips.' . $index . '.paragraph', $itnery['paragraph']) }}</textarea>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-danger" onclick="removeElement(this)">Remove</button>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addDynamicField('Itnery_tips')">Add Itnery</button>
+                    <input type="hidden" id="Itnery_tipsIndex" value="{{ count($trek->Itnery_tips) }}">
                 </div>
 
                 <!-- Key Attractions -->
@@ -142,7 +195,28 @@
                     <button type="button" class="btn btn-secondary" onclick="addDynamicField('how_to_reach')">Add How to Reach</button>
                     <input type="hidden" id="how_to_reachIndex" value="{{ count($trek->how_to_reach) }}">
                 </div>
+                <div class="form-group">
+                    <label for="images">Trek Images</label>
+                    <div class="preview-images-container mb-3">
+                        <h4>Existing Images:</h4>
+                        @if (!empty($trek->image_paths) && is_array($trek->image_paths))
+                        @foreach ($trek->image_paths as $path)
+                        <div class="image-preview-wrapper" style="display: inline-block; margin: 10px; text-align: center;">
+                            <img src="{{ asset($path) }}" alt="Trek Image" style="width: 150px; height: 150px; object-fit: cover;">
+                            <p>{{ $path }}</p>
+                            <!-- Optional delete option (handled on the backend) -->
+                            <input type="checkbox" name="delete_images[]" value="{{ $path }}"> Delete
+                        </div>
+                        @endforeach
+                        @else
+                        <p>No existing images available.</p>
+                        @endif
+                    </div>
 
+                    <h4>Upload New Images:</h4>
+                    <input type="file" name="images[]" id="images" class="form-control" multiple>
+                    <small class="text-muted">You can upload multiple images. Allowed formats: jpg, jpeg, png, gif.</small>
+                </div>
                 <!-- Submit Button -->
                 <button type="submit" class="btn btn-primary">Update Trek</button>
             </form>
@@ -151,14 +225,38 @@
 </div>
 
 <script>
-function addDynamicField(fieldType) {
-    const indexField = document.getElementById(`${fieldType}Index`);
-    let index = parseInt(indexField.value) || 0;
-    indexField.value = index + 1;
+    function addRouteField() {
+        const container = document.getElementById('routeContainer');
 
-    const container = document.getElementById(`${fieldType}Container`);
+        // Create a unique ID for the new field
+        const timestamp = new Date().getTime();
+        const newFieldId = `route-${timestamp}`;
 
-    const newFieldHTML = `
+        // Add a new input field with a remove button
+        const newField = `
+        <div class="input-group mb-2" id="${newFieldId}">
+            <input type="text" name="route[]" class="form-control" placeholder="Enter Route">
+            <button type="button" class="btn btn-danger" onclick="removeRouteField('${newFieldId}')">Remove</button>
+        </div>
+    `;
+        container.insertAdjacentHTML('beforeend', newField);
+    }
+
+    function removeRouteField(fieldId) {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.remove();
+        }
+    }
+
+    function addDynamicField(fieldType) {
+        const indexField = document.getElementById(`${fieldType}Index`);
+        let index = parseInt(indexField.value) || 0;
+        indexField.value = index + 1;
+
+        const container = document.getElementById(`${fieldType}Container`);
+
+        const newFieldHTML = `
         <div class="row mb-2 align-items-center">
             <div class="col-md-4">
                 <input type="text" name="${fieldType}[${index}][heading]" class="form-control" placeholder="Heading">
@@ -171,11 +269,13 @@ function addDynamicField(fieldType) {
             </div>
         </div>
     `;
-    container.insertAdjacentHTML('beforeend', newFieldHTML);
-}
+        container.insertAdjacentHTML('beforeend', newFieldHTML);
+    }
 
-function removeElement(element) {
-    element.closest('.row').remove();
-}
+    function removeElement(element) {
+        element.closest('.row').remove();
+    }
+</script>
+
 </script>
 @endsection
